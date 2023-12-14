@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Yvf8yPZwyU03H/HoC+GjuFVEE22y26tYD8IMSwKpgO9LkDDayXQiCtGjJhaB7PLoQwPylUvvb9p5duaQUCR/cA==",
+  "dgSpecHash": "OL02UuPAjMSGFn/L3H+P9LPyl8ne60gqxH/Rp1fm+YV0xl9w4cd508iwz4dfdD3jU3kKAJKC2tXG3kE34jlDqg==",
   "success": true,
-  "projectFilePath": "D:\\project\\ASP.NET+VUE\\Scrabble\\Scrabble.csproj",
+  "projectFilePath": "D:\\bootcamp-main\\projectScrabble-main\\Scrabble.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -11,12 +11,12 @@ class Program
 
 
 		game.AddPlayer(player1, player2, player3, player4);
-		game.GetPlayerList();
-		game.PlayerTurn();
+		// game.GetPlayerList();
+		// game.PlayerTurn();
 		// game.SwitchPLayer();
 		// game.SwitchPLayer();
 		// game.SwitchPLayer();
-		game.SwitchPlayer();
+		// game.SwitchPlayer();
 		// game.CreateBoard(15);
 		
 		//GET SCORE
@@ -27,5 +27,6 @@ class Program
 		// game.GetPieceOfBag();
 		// game.GetRandom();
 		// game.GetPieceOfBag();
+		// game.GetBoard();
 	}
 }
