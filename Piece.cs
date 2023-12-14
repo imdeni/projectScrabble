@@ -10,8 +10,8 @@ class Piece : IPiece
 		this.pieceLetter = pieceLetter;
 	}
 	// public PieceStatus pieceStatus;
-	public override string ToString()
-	{
-		return $"{pieceID}, {pieceLetter}";
-	}
+	// public override string ToString()
+	// {
+	// 	return $"{pieceID}, {pieceLetter}";
+	// }
 }

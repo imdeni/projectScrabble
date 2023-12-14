@@ -8,8 +8,8 @@ public class Player : IPlayer
 		this.id = id;
 		this.name = name;
 	}
-	public override string ToString()
-    {
-		return $"{id}, {name}";
-    }
+	// public override string ToString()
+    // {
+	// 	return $"{id}, {name}";
+    // }
 }

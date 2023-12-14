@@ -1,5 +1,6 @@
 namespace GameControllerLib;
-
+using System.Runtime.Serialization.Json;
+using System.Text;
 public class GameController
 {
 
@@ -11,27 +12,23 @@ public class GameController
 	private Dictionary<IPlayer, List<IPiece>> _playersPiece = new();
 	private Random rand = new Random();
 	int countTurn = 0;
-	public GameController(string filename, int sizeBoard)
+	bool firstMove = false;
+	public static int sizeBoard = 15;
+	public GameController(string filename)
 	{
-		CreatePieceOfBag(filename);
 		CreateBoard(sizeBoard);
-		// GetPieceOfBag();
+		CreatePieceOfBag(filename);
 	}
 	#endregion GAMECONTROLLER
 
 	#region PLAYER
 	public bool AddPlayer(params IPlayer[] players)
 	{
-		Console.Write("Adding players : ");
 		foreach (var i in players)
 		{
 			_players.Add(i);
-			Console.Write(i+" ");
 			GeneratePieceOnStart(i);
 		}
-		Console.WriteLine("");
-		
-		GetPlayerPiece();
 		return true;
 	}
 
@@ -55,23 +52,23 @@ public class GameController
 	}
 	#endregion PLAYER
 
-	#region CREATEPIECE
-	public bool CreatePiece()
-	{
-		int counter = 0;
-		Console.Write("Generate piece = ");
-		for (char c = 'A'; c <= 'Z'; c++)
-		{
-			Piece piece = new Piece(counter, c.ToString());
-			_piece.Add(piece);
-			Console.Write("[" + _piece[counter] + "] ");
-			counter++;
-		}
-		Console.WriteLine("");
-		Console.WriteLine("");
-		return true;
-	}
-	#endregion CREATEPIECE
+	// #region CREATEPIECE
+	// public bool CreatePiece()
+	// {
+	// 	int counter = 0;
+	// 	Console.Write("Generate piece = ");
+	// 	for (char c = 'A'; c <= 'Z'; c++)
+	// 	{
+	// 		Piece piece = new Piece(counter, c.ToString());
+	// 		_piece.Add(piece);
+	// 		Console.Write("[" + _piece[counter] + "] ");
+	// 		counter++;
+	// 	}
+	// 	Console.WriteLine("");
+	// 	Console.WriteLine("");
+	// 	return true;
+	// }
+	// #endregion CREATEPIECE
 
 	#region CREATEBOARD
 	public bool CreateBoard(int board)
@@ -82,57 +79,59 @@ public class GameController
 			{
 				Board boardTile = new Board(i, j);
 				_boardTile.Add(boardTile);
-				// if (i==8 && j==8){
-				//     Console.Write("[  X  ] ");
-				// }else if(j==board){
-				//     Console.WriteLine("[ "+i+","+j+"] ");
-				// }else if(i<=9){
-				//     Console.Write("[ "+i+","+j+" ] ");
-				// }else{
-				//     Console.Write("["+i+","+j+" ] ");
-				// }
 			}
 		}
-		Console.WriteLine("Board generated");
-		GetBoard();
+		CreateBonus();
 		return true;
 	}
-	public bool GetBoard()
+	public bool CreateBonus()
 	{
-		foreach (var i in _boardTile)
+		foreach (var x in _boardTile)
 		{
-			// Console.Write("[{0},{1}]", i.boardX, i.boardY);
-			if (i.boardX == 8 && i.boardY == 8)
+			if (x.boardX == 8 && x.boardY == 8)
 			{
-				Console.Write("[ X  ] ");
+				x.boardStatus = BoardStatus.Start;
 			}
-			else if (i.boardY == 15)
+			else if ((x.boardX == 1 || x.boardX == 8 || x.boardX == 15) && (x.boardY == 1 || x.boardY == 8 || x.boardY == 15))
 			{
-				Console.WriteLine("[{0},{1}] ", i.boardX, i.boardY);
+				x.boardStatus = BoardStatus.TW;
 			}
-			else if (i.boardX <= 9)
+			else if ((x.boardX == 2 || x.boardX == 14) && (x.boardY == 2 || x.boardY == 14)
+					|| (x.boardX == 3 || x.boardX == 13) && (x.boardY == 3 || x.boardY == 13)
+					|| (x.boardX == 4 || x.boardX == 12) && (x.boardY == 4 || x.boardY == 12)
+					|| (x.boardX == 5 || x.boardX == 11) && (x.boardY == 5 || x.boardY == 11))
 			{
-				Console.Write("[ {0},{1}] ", i.boardX, i.boardY);
+				x.boardStatus = BoardStatus.DW;
 			}
-			else
+			else if ((x.boardX == 2 || x.boardX == 6 || x.boardX == 10 || x.boardX == 14) && (x.boardY == 2 || x.boardY == 6 || x.boardY == 10 || x.boardY == 14))
 			{
-				Console.Write("[{0},{1}] ", i.boardX, i.boardY);
+				x.boardStatus = BoardStatus.TL;
+			}
+			else if ((x.boardX == 1 || x.boardX == 4 || x.boardX == 12 || x.boardX == 15) && (x.boardY == 1 || x.boardY == 4 || x.boardY == 12 || x.boardY == 15)
+					|| (x.boardX == 3 || x.boardX == 7 || x.boardX == 9 || x.boardX == 13) && (x.boardY == 3 || x.boardY == 7 || x.boardY == 9 || x.boardY == 13)
+					|| (x.boardX == 4 || x.boardX == 8 || x.boardX == 12) && (x.boardY == 4 || x.boardY == 8 || x.boardY == 12)
+					)
+			{
+				x.boardStatus = BoardStatus.DL;
 			}
 		}
 		return true;
 	}
+	public List<IBoard> GetBoard()
+	{
+		return _boardTile;
+	}
+
 	#endregion CREATEBOARD
 
 	#region TURN
 	public IPlayer PlayerTurn()
 	{
-		Console.WriteLine("Player turn = [" + _players[countTurn] + "]");
 		return _players[countTurn];
 	}
 
 	public bool SwitchPlayer()
 	{
-		Console.WriteLine("Switch player turn");
 		if (countTurn == _players.Count - 1)
 		{
 			countTurn = 0;
@@ -141,7 +140,6 @@ public class GameController
 		{
 			countTurn++;
 		}
-		PlayerTurn();
 		return true;
 	}
 	#endregion TURN
@@ -211,27 +209,17 @@ public class GameController
 					}
 				}
 			}
-			Console.WriteLine("Pieces on bag generated");
 		}
-		GetPieceOfBag();
 		return _pieceBag;
 	}
 	public Dictionary<int, string> GetPieceOfBag()
 	{
-		Console.Write($"{_pieceBag.Count} piece on bag : ");
-		foreach (var data in _pieceBag)
-		{
-			Console.Write("[{0}]", data.Value);
-		}
-		Console.WriteLine("");
 		return _pieceBag;
 	}
 	public bool GetRandom()
 	{
 		List<int> keyList = new List<int>(_pieceBag.Keys);
-		// Random rand = new Random();
 		int randomKey = keyList[rand.Next(keyList.Count)];
-		// return _pieceBag[randomKey];
 		Console.WriteLine(_pieceBag[randomKey] + "," + randomKey);
 		_pieceBag.Remove(randomKey);
 		return true;
@@ -251,20 +239,31 @@ public class GameController
 		_piece.RemoveRange(0, _piece.Count());
 		return true;
 	}
-	
-	public bool GetPlayerPiece()
+
+	public Dictionary<IPlayer, List<IPiece>> GetPlayerPiece()
 	{
-		Console.WriteLine("Distribute Pieces to Players :");
-		foreach (var data in _playersPiece)
+		return _playersPiece;
+	}
+
+	public List<Dictionaries> GetDictionaries()
+	{
+		DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Dictionaries>));
+		List<Dictionaries> importDictionaries;
+		using (FileStream stream2 = new FileStream("Dictionaries.json", FileMode.Open))
 		{
-			Console.Write(data.Key + " ");
-			// Console.WriteLine(data.Key + ", "+data.Value[27].pieceLetter+" ");
-			foreach (var x in data.Value)
-			{
-				Console.Write(x.pieceLetter);
-			}
-			Console.WriteLine(" ");
+			importDictionaries = (List<Dictionaries>)ser.ReadObject(stream2);
+		}
+		return importDictionaries;
+	}
+
+	public bool Move(int player)
+	{
+		if (firstMove == false)
+		{
+			
+			firstMove = true;
 		}
 		return true;
 	}
+
 }

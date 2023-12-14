@@ -42,3 +42,17 @@ D:\bootcamp-main\projectScrabble-main\obj\Debug\net7.0\refint\Scrabble.dll
 D:\bootcamp-main\projectScrabble-main\obj\Debug\net7.0\Scrabble.pdb
 D:\bootcamp-main\projectScrabble-main\obj\Debug\net7.0\Scrabble.genruntimeconfig.cache
 D:\bootcamp-main\projectScrabble-main\obj\Debug\net7.0\ref\Scrabble.dll
+D:\project\ASP.NET+VUE\projectScrabble-main\bin\Debug\net7.0\Scrabble.exe
+D:\project\ASP.NET+VUE\projectScrabble-main\bin\Debug\net7.0\Scrabble.deps.json
+D:\project\ASP.NET+VUE\projectScrabble-main\bin\Debug\net7.0\Scrabble.runtimeconfig.json
+D:\project\ASP.NET+VUE\projectScrabble-main\bin\Debug\net7.0\Scrabble.dll
+D:\project\ASP.NET+VUE\projectScrabble-main\bin\Debug\net7.0\Scrabble.pdb
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.GeneratedMSBuildEditorConfig.editorconfig
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.AssemblyInfoInputs.cache
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.AssemblyInfo.cs
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.csproj.CoreCompileInputs.cache
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.dll
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\refint\Scrabble.dll
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.pdb
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\Scrabble.genruntimeconfig.cache
+D:\project\ASP.NET+VUE\projectScrabble-main\obj\Debug\net7.0\ref\Scrabble.dll

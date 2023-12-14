@@ -1,4 +1,4 @@
-namespace EnumPieceStatus;
+namespace GameControllerLib;
 enum PieceStatus
 {
 	OnBag,
