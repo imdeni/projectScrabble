@@ -8,12 +8,13 @@ public class GameController
 	private List<IPlayer> _players = new();
 	private List<IPiece> _piece = new();
 	private List<IBoard> _boardTile = new();
+	private Dictionary<IBoard,string> _temporaryWord = new();
 	private Dictionary<int, string> _pieceBag = new();
 	private Dictionary<IPlayer, List<IPiece>> _playersPiece = new();
 	private Random rand = new Random();
 	int countTurn = 0;
 	bool firstMove = false;
-	public static int sizeBoard = 15;
+	public int sizeBoard = 15;
 	public GameController(string filename)
 	{
 		CreateBoard(sizeBoard);
@@ -37,38 +38,12 @@ public class GameController
 	{
 		return _players[index];
 	}
-
-	public bool GetPlayerList()
+	public List<IPlayer> GetPlayerList()
 	{
-		Console.WriteLine("");
-		Console.Write("Get list of player = ");
-		for (int player = 0; player < _players.Count; player++)
-		{
-			Console.Write("[" + _players[player] + "] ");
-		}
-		Console.WriteLine("");
-		Console.WriteLine("");
-		return true;
+		return _players;
 	}
-	#endregion PLAYER
 
-	// #region CREATEPIECE
-	// public bool CreatePiece()
-	// {
-	// 	int counter = 0;
-	// 	Console.Write("Generate piece = ");
-	// 	for (char c = 'A'; c <= 'Z'; c++)
-	// 	{
-	// 		Piece piece = new Piece(counter, c.ToString());
-	// 		_piece.Add(piece);
-	// 		Console.Write("[" + _piece[counter] + "] ");
-	// 		counter++;
-	// 	}
-	// 	Console.WriteLine("");
-	// 	Console.WriteLine("");
-	// 	return true;
-	// }
-	// #endregion CREATEPIECE
+	#endregion PLAYER
 
 	#region CREATEBOARD
 	public bool CreateBoard(int board)
@@ -125,9 +100,9 @@ public class GameController
 	#endregion CREATEBOARD
 
 	#region TURN
-	public IPlayer PlayerTurn()
+	public int PlayerTurn()
 	{
-		return _players[countTurn];
+		return _players[countTurn].id;
 	}
 
 	public bool SwitchPlayer()
@@ -256,14 +231,124 @@ public class GameController
 		return importDictionaries;
 	}
 
-	public bool Move(int player)
+	// public bool Move(int player)
+	// {
+	// 	if (firstMove == false)
+	// 	{
+
+	// 		firstMove = true;
+	// 	}
+	// 	return true;
+	// }
+
+	public List<IPiece> AvailablePiece()
+	{
+		foreach (var data in GetPlayerPiece())
+		{
+			if (data.Key.id == PlayerTurn())
+			{
+				return data.Value;
+			}
+		}
+		return null;
+	}
+	public void ChoosePiece(string letter)
 	{
 		if (firstMove == false)
 		{
-			
+			foreach (var x in _boardTile)
+			{
+				if (x.boardX == 8 && x.boardY == 8)
+				{
+					Board b = new Board(8, 8);
+					_temporaryWord.Add(b,letter);
+					// foreach(var a in _temporaryWord)
+					// {
+					// 	Console.WriteLine(a.Value+" "+ a.Key.boardX+" "+a.Key.boardY);
+					// }
+					x.letter = letter;
+					x.boardStatus = BoardStatus.Filled;
+				}
+			}
 			firstMove = true;
+		}else
+		{
+			
 		}
-		return true;
+
+	}
+	
+	public void ViewBoard()
+	{
+		// BOARD
+			foreach (var x in GetBoard())
+			{
+				if (x.boardStatus.ToString() == "Filled" && x.boardY == 15)
+				{
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.WriteLine("[{0} ] ", x.letter);
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "Filled" && x.boardY != 15)
+				{
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.Write("[{0} ] ", x.letter);
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "DL" && x.boardY == 15)
+				{
+					Console.ForegroundColor = ConsoleColor.Cyan;
+					Console.WriteLine("[DL] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "TW" && x.boardY == 15)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("[TW] ");
+					Console.ResetColor();
+				}
+				else if (x.boardY == 15)
+				{
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.WriteLine("[  ] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "DL")
+				{
+					Console.ForegroundColor = ConsoleColor.Cyan;
+					Console.Write("[DL] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "TL")
+				{
+					Console.ForegroundColor = ConsoleColor.Blue;
+					Console.Write("[TL] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "DW")
+				{
+					Console.ForegroundColor = ConsoleColor.Magenta;
+					Console.Write("[DW] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "TW")
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.Write("[TW] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "Start")
+				{
+					Console.ForegroundColor = ConsoleColor.Magenta;
+					Console.Write("[XX] ");
+					Console.ResetColor();
+				}
+				else if (x.boardStatus.ToString() == "Empty")
+				{
+					Console.Write("[  ] ");
+				}
+
+			}
 	}
 
 }

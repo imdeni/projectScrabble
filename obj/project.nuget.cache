@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zZ83If/qM6eRRLaSU1mQQe4mc27+k16i8cATzdgrJZEE1rKIhDIqIw+gTALoaqpOwB4LUGuSm7oLFGxVwoA1Ag==",
+  "dgSpecHash": "xVamEJXUOKFEA87H1qffwZ0FXXoT6Xu6z2/ms8kcRixECM83pnbFeiOM2ZDIOqJmeIwY6j9ZYjD6TY743hijig==",
   "success": true,
-  "projectFilePath": "D:\\project\\ASP.NET+VUE\\projectScrabble-main\\Scrabble.csproj",
+  "projectFilePath": "D:\\projectScrabble-main\\Scrabble.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -8,31 +8,24 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\dee\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Batch 7\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\project\\ASP.NET+VUE\\projectScrabble-main\\Scrabble.csproj",
+      "projectUniqueName": "d:\\projectScrabble-main\\Scrabble.csproj",
       "projectName": "Scrabble",
-      "projectPath": "D:\\project\\ASP.NET+VUE\\projectScrabble-main\\Scrabble.csproj",
-      "packagesPath": "C:\\Users\\dee\\.nuget\\packages\\",
-      "outputPath": "D:\\project\\ASP.NET+VUE\\projectScrabble-main\\obj\\",
+      "projectPath": "d:\\projectScrabble-main\\Scrabble.csproj",
+      "packagesPath": "C:\\Users\\Batch 7\\.nuget\\packages\\",
+      "outputPath": "d:\\projectScrabble-main\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\dee\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Batch 7\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -66,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }
