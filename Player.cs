@@ -3,6 +3,7 @@ public class Player : IPlayer
 {
 	public int id { get;}
 	public string name { get; }
+	public int skor {get;set;}
 	public Player(int id, string name) 
 	{
 		this.id = id;
@@ -10,6 +11,6 @@ public class Player : IPlayer
 	}
 	// public override string ToString()
     // {
-	// 	return $"{id}, {name}";
+	// 	return $"Player {id} : {name}";
     // }
 }

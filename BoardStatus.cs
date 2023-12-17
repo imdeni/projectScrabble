@@ -1,11 +1,11 @@
 namespace GameControllerLib;
 public enum BoardStatus
-{
+{ 
 	Empty,
 	Start,
-	DL,
-	TL,
-    DW,
-    TW,
+	DoubleLetter,
+	TripleLetter,
+    DoubleWord,
+    TripleWord,
 	Filled
 }

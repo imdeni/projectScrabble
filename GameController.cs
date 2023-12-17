@@ -1,173 +1,31 @@
 namespace GameControllerLib;
 using System.Runtime.Serialization.Json;
-using System.Text;
 public class GameController
 {
-
-	#region GAMECONTROLLER
 	private List<IPlayer> _players = new();
 	private List<IPiece> _piece = new();
+	private List<IPiece> _listOfPiece = new();
 	private List<IBoard> _boardTile = new();
-	private Dictionary<IBoard,string> _temporaryWord = new();
+	private List<string> _dictionary = new();
+	private Dictionary<IBoard, string> _temporaryWord = new();
+	private Dictionary<int, int> _temporaryMove = new();
 	private Dictionary<int, string> _pieceBag = new();
 	private Dictionary<IPlayer, List<IPiece>> _playersPiece = new();
+	
 	private Random rand = new Random();
 	int countTurn = 0;
 	bool firstMove = false;
-	public int sizeBoard = 15;
-	public GameController(string filename)
+	bool stopTurn = false;
+	public int sizeBoard;
+	public GameController(string filename, int boardSize)
 	{
-		CreateBoard(sizeBoard);
 		CreatePieceOfBag(filename);
+		CreateBoard(boardSize);
 	}
-	#endregion GAMECONTROLLER
-
-	#region PLAYER
-	public bool AddPlayer(params IPlayer[] players)
-	{
-		foreach (var i in players)
-		{
-			_players.Add(i);
-			GeneratePieceOnStart(i);
-		}
-		return true;
-	}
-
-
-	public IPlayer GetPlayer(int index)
-	{
-		return _players[index];
-	}
-	public List<IPlayer> GetPlayerList()
-	{
-		return _players;
-	}
-
-	#endregion PLAYER
-
-	#region CREATEBOARD
-	public bool CreateBoard(int board)
-	{
-		for (int i = 1; i <= board; i++)
-		{
-			for (int j = 1; j <= board; j++)
-			{
-				Board boardTile = new Board(i, j);
-				_boardTile.Add(boardTile);
-			}
-		}
-		CreateBonus();
-		return true;
-	}
-	public bool CreateBonus()
-	{
-		foreach (var x in _boardTile)
-		{
-			if (x.boardX == 8 && x.boardY == 8)
-			{
-				x.boardStatus = BoardStatus.Start;
-			}
-			else if ((x.boardX == 1 || x.boardX == 8 || x.boardX == 15) && (x.boardY == 1 || x.boardY == 8 || x.boardY == 15))
-			{
-				x.boardStatus = BoardStatus.TW;
-			}
-			else if ((x.boardX == 2 || x.boardX == 14) && (x.boardY == 2 || x.boardY == 14)
-					|| (x.boardX == 3 || x.boardX == 13) && (x.boardY == 3 || x.boardY == 13)
-					|| (x.boardX == 4 || x.boardX == 12) && (x.boardY == 4 || x.boardY == 12)
-					|| (x.boardX == 5 || x.boardX == 11) && (x.boardY == 5 || x.boardY == 11))
-			{
-				x.boardStatus = BoardStatus.DW;
-			}
-			else if ((x.boardX == 2 || x.boardX == 6 || x.boardX == 10 || x.boardX == 14) && (x.boardY == 2 || x.boardY == 6 || x.boardY == 10 || x.boardY == 14))
-			{
-				x.boardStatus = BoardStatus.TL;
-			}
-			else if ((x.boardX == 1 || x.boardX == 4 || x.boardX == 12 || x.boardX == 15) && (x.boardY == 1 || x.boardY == 4 || x.boardY == 12 || x.boardY == 15)
-					|| (x.boardX == 3 || x.boardX == 7 || x.boardX == 9 || x.boardX == 13) && (x.boardY == 3 || x.boardY == 7 || x.boardY == 9 || x.boardY == 13)
-					|| (x.boardX == 4 || x.boardX == 8 || x.boardX == 12) && (x.boardY == 4 || x.boardY == 8 || x.boardY == 12)
-					)
-			{
-				x.boardStatus = BoardStatus.DL;
-			}
-		}
-		return true;
-	}
-	public List<IBoard> GetBoard()
-	{
-		return _boardTile;
-	}
-
-	#endregion CREATEBOARD
-
-	#region TURN
-	public int PlayerTurn()
-	{
-		return _players[countTurn].id;
-	}
-
-	public bool SwitchPlayer()
-	{
-		if (countTurn == _players.Count - 1)
-		{
-			countTurn = 0;
-		}
-		else
-		{
-			countTurn++;
-		}
-		return true;
-	}
-	#endregion TURN
-
-	#region GETSCORE
-	public int GetScore(string word)
-	{
-		word = word.ToLower();
-		int score = 0;
-		for (int i = 0; i < word.Length; i++)
-		{
-			if (word[i] == 'a' || word[i] == 'e' || word[i] == 'i' || word[i] == 'o' || word[i] == 'u' || word[i] == 'l' || word[i] == 'n' || word[i] == 'r' || word[i] == 's' || word[i] == 't')
-			{
-				score++;
-			}
-			else if (word[i] == 'd' || word[i] == 'g')
-			{
-				score += 2;
-			}
-			else if (word[i] == 'b' || word[i] == 'c' || word[i] == 'm' || word[i] == 'p')
-			{
-				score += 3;
-			}
-			else if (word[i] == 'f' || word[i] == 'h' || word[i] == 'v' || word[i] == 'w' || word[i] == 'y')
-			{
-				score += 4;
-			}
-			else if (word[i] == 'k')
-			{
-				score += 5;
-			}
-			else if (word[i] == 'j' || word[i] == 'x')
-			{
-				score += 8;
-			}
-			else if (word[i] == 'q' || word[i] == 'z')
-			{
-				score += 10;
-			}
-			else
-			{
-				score = 0;
-				break;
-			}
-		}
-		return score;
-	}
-	#endregion GETSCORE
-
 	public Dictionary<int, string> CreatePieceOfBag(string filename)
 	{
 		int counter = 0;
-
+		int counter2 = 0;
 		using (StreamReader reader = new StreamReader(filename))
 		{
 			string? line = string.Empty;
@@ -176,10 +34,16 @@ public class GameController
 				if (line != string.Empty)
 				{
 					string[] inputSplited = line.Split(',');
-
 					foreach (string str in inputSplited)
 					{
 						_pieceBag.Add(counter, str);
+
+						Piece piece = new Piece(counter2, str);
+						if (!_listOfPiece.Any(x => x.pieceLetter.ToLower() == str.ToLower()))
+						{
+							_listOfPiece.Add(piece);
+							counter2++;
+						}
 						counter++;
 					}
 				}
@@ -187,16 +51,37 @@ public class GameController
 		}
 		return _pieceBag;
 	}
+	public List<IPiece> getPiece()
+	{
+		return _listOfPiece;
+	}
 	public Dictionary<int, string> GetPieceOfBag()
 	{
 		return _pieceBag;
 	}
-	public bool GetRandom()
+	public bool CreateBoard(int board)
 	{
-		List<int> keyList = new List<int>(_pieceBag.Keys);
-		int randomKey = keyList[rand.Next(keyList.Count)];
-		Console.WriteLine(_pieceBag[randomKey] + "," + randomKey);
-		_pieceBag.Remove(randomKey);
+		sizeBoard = board;
+		for (int i = 1; i <= board; i++)
+		{
+			for (int j = 1; j <= board; j++)
+			{
+				Board boardTile = new Board(i, j);
+				_boardTile.Add(boardTile);
+			}
+		}
+		return true;
+	}
+	public bool AddPlayer(params IPlayer[] players)
+	{
+		foreach (var i in players)
+		{
+			if (!_players.Any(x => x.id == i.id || x.name == i.name))
+			{
+				_players.Add(i);
+				GeneratePieceOnStart(i);
+			}
+		}
 		return true;
 	}
 	public bool GeneratePieceOnStart(IPlayer player)
@@ -214,17 +99,155 @@ public class GameController
 		_piece.RemoveRange(0, _piece.Count());
 		return true;
 	}
-
 	public Dictionary<IPlayer, List<IPiece>> GetPlayerPiece()
 	{
 		return _playersPiece;
 	}
+	public List<IPiece> GetPiece()
+	{
+		return _piece;
+	}
 
+	public IPlayer GetPlayer(int index)
+	{
+		return _players[index];
+	}
+	public List<IPlayer> GetPlayerList()
+	{
+		return _players;
+	}
+	public bool SetBoardBonus(int boardX, int boardY, string bonus, int multiply)
+	{
+		foreach (var x in _boardTile)
+		{
+			if (x.boardX == boardX && x.boardY == boardY)
+			{
+				if (bonus == "Start")
+				{
+					x.boardStatus = BoardStatus.Start;
+					x.bonusBoard = multiply;
+				}
+				else if (bonus == "DoubleLetter")
+				{
+					x.boardStatus = BoardStatus.DoubleLetter;
+					x.bonusBoard = multiply;
+				}
+				else if (bonus == "TripleLetter")
+				{
+					x.boardStatus = BoardStatus.TripleLetter;
+					x.bonusBoard = multiply;
+				}
+				else if (bonus == "DoubleWord")
+				{
+					x.boardStatus = BoardStatus.DoubleWord;
+					x.bonusBoard = multiply;
+				}
+				else if (bonus == "TripleWord")
+				{
+					x.boardStatus = BoardStatus.TripleWord;
+					x.bonusBoard = multiply;
+				}
+			}
+		}
+		return true;
+	}
+	public List<IBoard> GetBoard()
+	{
+		return _boardTile;
+	}
+	public int PlayerTurn()
+	{
+		return _players[countTurn].id;
+	}
+	public bool SwitchPlayer()
+	{
+		if (countTurn == _players.Count - 1)
+		{
+			countTurn = 0;
+		}
+		else
+		{
+			countTurn++;
+		}
+		return true;
+	}
+	public bool SetScore(string letter, int skor)
+	{
+		letter = letter.ToLower();
+		foreach (var x in _listOfPiece)
+		{
+			if (x.pieceLetter.ToLower() == letter)
+			{
+				x.pieceSkor = skor;
+			}
+		}
+		return true;
+	}
+	public int GetScore()
+	{
+		// foreach(var s in GetDictionaries()){
+		// 	Console.WriteLine(s);
+		// }
+		// if(words _temporaryWord.ToList().ForEach(data => Console.WriteLine(String.Concat(data.Value))) ){
+
+		// }
+
+		int score = 0;
+		int totalscore = 0;
+
+		foreach (var x in _temporaryWord)
+		{
+			x.Value.ToLower();
+
+			foreach (var words in _listOfPiece)
+			{
+				if (words.pieceLetter == x.Value)
+				{
+					score += words.pieceSkor;
+					foreach (var data in _boardTile)
+					{
+						if (data.boardX == x.Key.boardX && data.boardY == x.Key.boardY && (data.boardStatus.ToString() == "DoubleLetter" || data.boardStatus.ToString() == "TripleLetter"))
+						{
+							score = score * data.bonusBoard;
+						}
+					}
+				}
+			}
+		}
+		totalscore = score;
+
+		foreach (var x in _temporaryWord)
+		{
+			foreach (var data in _boardTile)
+			{
+				if (data.boardX == x.Key.boardX && data.boardY == x.Key.boardY && (data.boardStatus.ToString() == "DoubleWord" || data.boardStatus.ToString() == "TripleWord"))
+				{
+					totalscore = totalscore * data.bonusBoard;
+				}
+			}
+
+		}
+		foreach(var player in _players){
+			if (player.id==PlayerTurn()){
+				player.skor=totalscore;
+			}
+		}
+		return score;
+	}
+
+	public bool GetRandom()
+	{
+		List<int> keyList = new List<int>(_pieceBag.Keys);
+		int randomKey = keyList[rand.Next(keyList.Count)];
+		Console.WriteLine(_pieceBag[randomKey] + "," + randomKey);
+		_pieceBag.Remove(randomKey);
+		return true;
+	}
 	public List<Dictionaries> GetDictionaries()
 	{
 		DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Dictionaries>));
 		List<Dictionaries> importDictionaries;
-		using (FileStream stream2 = new FileStream("Dictionaries.json", FileMode.Open))
+		using (FileStream stream2 = new FileStream("Dictionaries.json", FileMode.Open, FileAccess.Read, FileShare.Read))
 		{
 			importDictionaries = (List<Dictionaries>)ser.ReadObject(stream2);
 		}
@@ -233,11 +256,7 @@ public class GameController
 
 	// public bool Move(int player)
 	// {
-	// 	if (firstMove == false)
-	// 	{
-
-	// 		firstMove = true;
-	// 	}
+	// 	
 	// 	return true;
 	// }
 
@@ -252,103 +271,150 @@ public class GameController
 		}
 		return null;
 	}
-	public void ChoosePiece(string letter)
+	public bool GetInputLetter(int index)
+	{
+		List<IPiece> p = new();
+		if (index == 200)
+		{
+			SwitchPlayer();
+		}
+		else
+		{
+			foreach (var x in _playersPiece)
+			{
+				foreach (var data in x.Value)
+				{
+					if (x.Key.id == PlayerTurn())
+					{
+						if (data.pieceID == index)
+						{
+							ChoosePiece(data.pieceLetter, data.pieceID);
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	public void ChoosePiece(string letter, int letterId)
 	{
 		if (firstMove == false)
 		{
 			foreach (var x in _boardTile)
 			{
-				if (x.boardX == 8 && x.boardY == 8)
+				if (x.boardStatus.ToString() == "Start")
 				{
-					Board b = new Board(8, 8);
-					_temporaryWord.Add(b,letter);
-					// foreach(var a in _temporaryWord)
-					// {
-					// 	Console.WriteLine(a.Value+" "+ a.Key.boardX+" "+a.Key.boardY);
-					// }
+					Board b = new Board(x.boardX, x.boardY);
+					_temporaryWord.Add(b, letter);
 					x.letter = letter;
 					x.boardStatus = BoardStatus.Filled;
+
+					// foreach (var dataKey in _playersPiece)
+					// {
+					// 	foreach (var data in dataKey.Value)
+					// 	{
+					// 		if (dataKey.Key.id == PlayerTurn())
+					// 		{
+					// 			if (data.pieceID == letterId)
+					// 			{
+					// 				_playersPiece.Remove(letterId);
+					// 			}
+					// 		}
+					// 	}
+					// }
+
+
 				}
 			}
 			firstMove = true;
-		}else
+		}
+		else
 		{
-			
+
 		}
 
 	}
-	
+
+	public bool StopTurn()
+	{
+		return stopTurn;
+	}
+	public Dictionary<IBoard, string> GetTemporaryWord()
+	{
+		return _temporaryWord;
+	}
+
 	public void ViewBoard()
 	{
 		// BOARD
-			foreach (var x in GetBoard())
+		foreach (var x in GetBoard())
+		{
+			if (x.boardStatus.ToString() == "Filled" && x.boardY == sizeBoard)
 			{
-				if (x.boardStatus.ToString() == "Filled" && x.boardY == 15)
-				{
-					Console.ForegroundColor = ConsoleColor.White;
-					Console.WriteLine("[{0} ] ", x.letter);
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "Filled" && x.boardY != 15)
-				{
-					Console.ForegroundColor = ConsoleColor.White;
-					Console.Write("[{0} ] ", x.letter);
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "DL" && x.boardY == 15)
-				{
-					Console.ForegroundColor = ConsoleColor.Cyan;
-					Console.WriteLine("[DL] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "TW" && x.boardY == 15)
-				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine("[TW] ");
-					Console.ResetColor();
-				}
-				else if (x.boardY == 15)
-				{
-					Console.ForegroundColor = ConsoleColor.White;
-					Console.WriteLine("[  ] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "DL")
-				{
-					Console.ForegroundColor = ConsoleColor.Cyan;
-					Console.Write("[DL] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "TL")
-				{
-					Console.ForegroundColor = ConsoleColor.Blue;
-					Console.Write("[TL] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "DW")
-				{
-					Console.ForegroundColor = ConsoleColor.Magenta;
-					Console.Write("[DW] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "TW")
-				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.Write("[TW] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "Start")
-				{
-					Console.ForegroundColor = ConsoleColor.Magenta;
-					Console.Write("[XX] ");
-					Console.ResetColor();
-				}
-				else if (x.boardStatus.ToString() == "Empty")
-				{
-					Console.Write("[  ] ");
-				}
-
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine("[{0} ] ", x.letter);
+				Console.ResetColor();
 			}
+			else if (x.boardStatus.ToString() == "Filled" && x.boardY != sizeBoard)
+			{
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write("[{0} ] ", x.letter);
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "DoubleLetter" && x.boardY == sizeBoard)
+			{
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.WriteLine("[DL] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "TripleWord" && x.boardY == sizeBoard)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("[TW] ");
+				Console.ResetColor();
+			}
+			else if (x.boardY == sizeBoard)
+			{
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine("[  ] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "DoubleLetter")
+			{
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.Write("[DL] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "TripleLetter")
+			{
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.Write("[TL] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "DoubleWord")
+			{
+				Console.ForegroundColor = ConsoleColor.Magenta;
+				Console.Write("[DW] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "TripleWord")
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write("[TW] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "Start")
+			{
+				Console.ForegroundColor = ConsoleColor.Magenta;
+				Console.Write("[XX] ");
+				Console.ResetColor();
+			}
+			else if (x.boardStatus.ToString() == "Empty")
+			{
+				Console.Write("[  ] ");
+			}
+
+		}
 	}
 
 }

@@ -1,14 +1,11 @@
 ﻿using GameControllerLib;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Xml;
 class Program
 {
-	public static bool x = false;
+
+	public static bool firstMove = false;
 	static void Main()
 	{
-		GameController game = new("bagPiece.txt");
+		GameController game = new("bagPiece.txt", 15);
 
 		Player player1 = new(1, "dee");
 		Player player2 = new(2, "lee");
@@ -17,162 +14,153 @@ class Program
 
 		game.AddPlayer(player1, player2, player3, player4);
 
-		// game.Move(game.PlayerTurn().id);
+		game.SetBoardBonus(8, 8, "Start", 0);
+		game.SetBoardBonus(1, 1, "TripleWord", 3);
+		game.SetBoardBonus(1, 8, "TripleWord", 3);
+		game.SetBoardBonus(1, 15, "TripleWord", 3);
+		game.SetBoardBonus(8, 1, "TripleWord", 3);
+		game.SetBoardBonus(8, 15, "TripleWord", 3);
+		game.SetBoardBonus(15, 1, "TripleWord", 3);
+		game.SetBoardBonus(15, 8, "TripleWord", 3);
+		game.SetBoardBonus(15, 15, "TripleWord", 3);
 
-		foreach (var data in game.GetPlayerPiece())
-		{
-			Console.Write("Player " + data.Key.id + ", Pieces :");
-			foreach (var x in data.Value)
-			{
-				Console.Write(x.pieceLetter);
-			}
-			Console.WriteLine(" ");
-		}
+		game.SetBoardBonus(2, 2, "DoubleWord", 2);
+		game.SetBoardBonus(2, 14, "DoubleWord", 2);
+		game.SetBoardBonus(14, 2, "DoubleWord", 2);
+		game.SetBoardBonus(14, 14, "DoubleWord", 2);
+		game.SetBoardBonus(3, 3, "DoubleWord", 2);
+		game.SetBoardBonus(3, 13, "DoubleWord", 2);
+		game.SetBoardBonus(13, 3, "DoubleWord", 2);
+		game.SetBoardBonus(13, 13, "DoubleWord", 2);
+		game.SetBoardBonus(4, 4, "DoubleWord", 2);
+		game.SetBoardBonus(4, 12, "DoubleWord", 2);
+		game.SetBoardBonus(12, 4, "DoubleWord", 2);
+		game.SetBoardBonus(12, 12, "DoubleWord", 2);
+		game.SetBoardBonus(5, 5, "DoubleWord", 2);
+		game.SetBoardBonus(11, 5, "DoubleWord", 2);
+		game.SetBoardBonus(5, 11, "DoubleWord", 2);
+		game.SetBoardBonus(11, 11, "DoubleWord", 2);
 
-		//PIECES DI BAG
-		Console.Write($"{game.GetPieceOfBag().Count} pieces on bag : ");
-		foreach (var xx in game.GetPieceOfBag())
-		{
-			Console.Write(xx.Value + ",");
-		}
+		game.SetBoardBonus(2, 6, "TripleLetter", 2);
+		game.SetBoardBonus(2, 10, "TripleLetter", 2);
+		game.SetBoardBonus(6, 2, "TripleLetter", 2);
+		game.SetBoardBonus(6, 6, "TripleLetter", 2);
+		game.SetBoardBonus(6, 10, "TripleLetter", 2);
+		game.SetBoardBonus(6, 14, "TripleLetter", 2);
+		game.SetBoardBonus(10, 2, "TripleLetter", 2);
+		game.SetBoardBonus(10, 6, "TripleLetter", 2);
+		game.SetBoardBonus(10, 10, "TripleLetter", 2);
+		game.SetBoardBonus(10, 14, "TripleLetter", 2);
+		game.SetBoardBonus(14, 6, "TripleLetter", 2);
+		game.SetBoardBonus(14, 10, "TripleLetter", 2);
+
+		game.SetBoardBonus(1, 4, "DoubleLetter", 2);
+		game.SetBoardBonus(1, 12, "DoubleLetter", 2);
+		game.SetBoardBonus(4, 1, "DoubleLetter", 2);
+		game.SetBoardBonus(12, 1, "DoubleLetter", 2);
+		game.SetBoardBonus(15, 4, "DoubleLetter", 2);
+		game.SetBoardBonus(15, 12, "DoubleLetter", 2);
+		game.SetBoardBonus(4, 15, "DoubleLetter", 2);
+		game.SetBoardBonus(12, 15, "DoubleLetter", 2);
+		game.SetBoardBonus(3, 7, "DoubleLetter", 2);
+		game.SetBoardBonus(3, 9, "DoubleLetter", 2);
+		game.SetBoardBonus(13, 7, "DoubleLetter", 2);
+		game.SetBoardBonus(13, 9, "DoubleLetter", 2);
+		game.SetBoardBonus(7, 3, "DoubleLetter", 2);
+		game.SetBoardBonus(7, 7, "DoubleLetter", 2);
+		game.SetBoardBonus(7, 9, "DoubleLetter", 2);
+		game.SetBoardBonus(9, 7, "DoubleLetter", 2);
+		game.SetBoardBonus(9, 9, "DoubleLetter", 2);
+		game.SetBoardBonus(9, 3, "DoubleLetter", 2);
+		game.SetBoardBonus(7, 13, "DoubleLetter", 2);
+		game.SetBoardBonus(9, 13, "DoubleLetter", 2);
+		game.SetBoardBonus(9, 13, "DoubleLetter", 2);
+		game.SetBoardBonus(4, 8, "DoubleLetter", 2);
+		game.SetBoardBonus(8, 4, "DoubleLetter", 2);
+		game.SetBoardBonus(8, 12, "DoubleLetter", 2);
+		game.SetBoardBonus(12, 8, "DoubleLetter", 2);
+
+		game.SetScore("A", 1);
+		game.SetScore("E", 1);
+		game.SetScore("I", 1);
+		game.SetScore("O", 1);
+		game.SetScore("U", 1);
+		game.SetScore("L", 1);
+		game.SetScore("N", 1);
+		game.SetScore("R", 1);
+		game.SetScore("S", 1);
+		game.SetScore("T", 1);
+		game.SetScore("D", 2);
+		game.SetScore("G", 2);
+		game.SetScore("B", 3);
+		game.SetScore("C", 3);
+		game.SetScore("M", 3);
+		game.SetScore("P", 3);
+		game.SetScore("F", 4);
+		game.SetScore("H", 4);
+		game.SetScore("V", 4);
+		game.SetScore("W", 4);
+		game.SetScore("Y", 4);
+		game.SetScore("K", 5);
+		game.SetScore("J", 8);
+		game.SetScore("X", 8);
+		game.SetScore("Q", 10);
+		game.SetScore("Z", 10);
+		game.SetScore(" ", 0);
+
+		game.getPiece().ToList().ForEach(data => Console.Write($"[{data.pieceID},{data.pieceLetter},{data.pieceSkor}]"));
+
+		game.GetPlayerList().ToList().ForEach(data => Console.WriteLine($"Player {data.id} : {data.name}, skor {data.skor}"));
+		Console.WriteLine("");
+
+		// string data = game.GetPlayer(0).ToString();
+		// Console.WriteLine(data);
+
+		Console.Write($"Pieces on bag {game.GetPieceOfBag().Count} : ");
+		game.GetPieceOfBag().ToList().ForEach(data => Console.Write($"[{data.Key},{data.Value}]"));
 		Console.WriteLine("");
 		Console.WriteLine("");
 
-		// // BOARD
-		// foreach (var x in game.GetBoard())
-		// {
-		// 	if (x.boardStatus.ToString() == "Filled" && x.boardY == 15)
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.White;
-		// 		Console.WriteLine("[{0} ] ", x.letter);
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "Filled" && x.boardY != 15)
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.White;
-		// 		Console.Write("[{0} ] ", x.letter);
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "DL" && x.boardY == 15)
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Cyan;
-		// 		Console.WriteLine("[DL] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "TW" && x.boardY == 15)
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Red;
-		// 		Console.WriteLine("[TW] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardY == 15)
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.White;
-		// 		Console.WriteLine("[  ] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "DL")
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Cyan;
-		// 		Console.Write("[DL] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "TL")
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Blue;
-		// 		Console.Write("[TL] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "DW")
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Magenta;
-		// 		Console.Write("[DW] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "TW")
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Red;
-		// 		Console.Write("[TW] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "Start")
-		// 	{
-		// 		Console.ForegroundColor = ConsoleColor.Magenta;
-		// 		Console.Write("[XX] ");
-		// 		Console.ResetColor();
-		// 	}
-		// 	else if (x.boardStatus.ToString() == "Empty")
-		// 	{
-		// 		Console.Write("[  ] ");
-		// 	}
+		Console.Write($"Player pieces : ");
+		game.GetPlayerPiece().ToList().ForEach(data => data.Value.ToList().ForEach(x => Console.Write($"[{data.Key.id},{x.pieceLetter},{x.pieceID}]")));
+		Console.WriteLine("");
+		Console.WriteLine("");
 
-		// }
-		game.ViewBoard();
-
-		int choose = 0;
-		foreach (var x in game.AvailablePiece())
+		while (game.StopTurn() == false)
 		{
-			Console.WriteLine($"choose number :{choose}, {x.pieceLetter}");
-			choose++;
-		}
-		Console.WriteLine($"choose number :7, END TURN");
-		string? selectedPiece = Console.ReadLine();
-		int index = int.Parse(selectedPiece);
-		if (index == 7)
-		{
-			
-		}
-		else if (index >= 0 && index < 7)
-		{
-			game.ChoosePiece(game.AvailablePiece()[index].pieceLetter);
-
 			game.ViewBoard();
-			Console.WriteLine("move pertama sudah di jalankan");
-			Console.ReadLine();
+
+
+			Console.Write("Available piece : ");
+			game.AvailablePiece().ToList().ForEach(data => Console.Write($" {data.pieceLetter} "));
+			Console.WriteLine();
+
+			Console.WriteLine($"Turn : Player {game.PlayerTurn()}");
+
+			game.AvailablePiece().ToList().ForEach(x => Console.WriteLine($"Letter {x.pieceLetter} (input {x.pieceID})"));
+			Console.WriteLine($"Stop turn (input 200)");
+
+			Console.Write($"Your input : ");
+			int letter = int.Parse(Console.ReadLine());
+			Console.WriteLine();
+
+			game.GetInputLetter(letter);
+
+			game.GetTemporaryWord().ToList().ForEach(x => Console.WriteLine($"letter {x.Value} set on [{x.Key.boardX},{x.Key.boardY}]"));
+			game.GetScore();
+
+			// game.GetBoard().ToList().ForEach(data => Console.WriteLine($"[{data.boardX},{data.boardY},{data.letter},{data.bonusBoard},{data.boardStatus}]"));
+
+			game.GetPlayerList().ToList().ForEach(data => Console.WriteLine($"Player {data.id} : {data.name}, skor {data.skor}"));
+			Console.WriteLine("");
+
+
+
+
 		}
 
+		// CHECK LIST OF _boardTile
+		// game.GetBoard().ToList().ForEach(data => Console.WriteLine($"[{data.boardX},{data.boardY},{data.letter},{data.bonusBoard},{data.boardStatus}]"));
 
-
-
-		// foreach (var x in game.GetDictionaries())
-		// {
-		// 	Console.WriteLine(x.GetName());
-		// }
-
-		// Console.WriteLine(game.AvailablePiece()[0].pieceLetter);
-		// foreach (var x in game.AvailablePiece())
-		// {
-		// 	Console.Write(x.pieceLetter);
-		// }
-		// game.ChoosePiece(game.AvailablePiece()[0].pieceLetter);
-
-		// foreach (var x in game.GetBoard())
-		// {
-		// 	Console.WriteLine($"{x.boardX},{x.boardY},{x.letter},{x.boardStatus}");
-		// }
-
-
-
-
-
-
-
-		// game.GetPlayerList();
-		// game.PlayerTurn();
-		// game.SwitchPLayer();
-		// game.SwitchPLayer();
-		// game.SwitchPLayer();
-		// game.SwitchPlayer();
-		// game.CreateBoard(15);
-
-		//GET SCORE
-		// string word = "hello";
-		// int result = game.GetScore(word);
-		// Console.WriteLine("word " + word + ",skor : " + result);
-
-		// game.GetPieceOfBag();
-		// game.GetRandom();
-		// game.GetPieceOfBag();
-		// game.GetBoard();
 	}
 }
